@@ -1,9 +1,9 @@
-import Link from 'next/link'
-import { notFound } from 'next/navigation'
-import { getAllRulePaths, getRule, getAllSkillMeta, SUPPORTED_LANGS, type Lang } from '@/lib/skills'
-import { ImpactBadge } from '@/components/ui/ImpactBadge'
-import { TagList } from '@/components/ui/TagList'
-import { MarkdownRenderer } from '@/components/MarkdownRenderer'
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { getAllRulePaths, getRule, getAllSkillMeta, SUPPORTED_LANGS, type Lang } from "@/lib/skills";
+import { ImpactBadge } from "@/components/ui/ImpactBadge";
+import { TagList } from "@/components/ui/TagList";
+import { MarkdownRenderer } from "@/components/MarkdownRenderer";
 
 export function generateStaticParams() {
   return SUPPORTED_LANGS.flatMap((lang) =>
@@ -11,24 +11,24 @@ export function generateStaticParams() {
       lang,
       skillSlug,
       ruleSlug,
-    }))
-  )
+    })),
+  );
 }
 
 interface Props {
-  params: Promise<{ lang: Lang; skillSlug: string; ruleSlug: string }>
+  params: Promise<{ lang: Lang; skillSlug: string; ruleSlug: string }>;
 }
 
 export default async function RulePage({ params }: Props) {
-  const { lang, skillSlug, ruleSlug } = await params
-  if (!SUPPORTED_LANGS.includes(lang)) notFound()
+  const { lang, skillSlug, ruleSlug } = await params;
+  if (!SUPPORTED_LANGS.includes(lang)) notFound();
 
-  const rule = getRule(skillSlug, ruleSlug, lang)
-  if (!rule) notFound()
+  const rule = getRule(skillSlug, ruleSlug, lang);
+  if (!rule) notFound();
 
-  const skills = getAllSkillMeta(lang)
-  const skill = skills.find((s) => s.slug === skillSlug)
-  const skillName = skill?.name ?? skillSlug
+  const skills = getAllSkillMeta(lang);
+  const skill = skills.find((s) => s.slug === skillSlug);
+  const skillName = skill?.name ?? skillSlug;
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-8 sm:px-6 md:py-16">
@@ -49,9 +49,7 @@ export default async function RulePage({ params }: Props) {
           <ImpactBadge impact={rule.impact} description={rule.impactDescription} />
         </div>
         <h1 className="text-xl font-semibold tracking-tight text-gray-900">{rule.title}</h1>
-        {rule.impactDescription && (
-          <p className="text-sm text-gray-500">{rule.impactDescription}</p>
-        )}
+        {rule.impactDescription && <p className="text-sm text-gray-500">{rule.impactDescription}</p>}
         <TagList tags={rule.tags} />
       </div>
 
@@ -59,5 +57,5 @@ export default async function RulePage({ params }: Props) {
 
       <MarkdownRenderer content={rule.content} />
     </main>
-  )
+  );
 }
