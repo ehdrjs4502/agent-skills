@@ -45,7 +45,7 @@ export function ImpactFilter({ counts, selected, onChange }: Props) {
         </div>
       </div>
 
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-row flex-wrap gap-2 md:flex-col md:gap-1">
         {available.map((level) => {
           const isSelected = selected.includes(level)
           const colors = IMPACT_COLORS[level]

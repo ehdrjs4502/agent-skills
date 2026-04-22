@@ -29,7 +29,7 @@ export default function RootLayout({
     >
       <body className="min-h-full bg-gray-50 font-sans text-gray-900">
         <header className="border-b border-gray-200 bg-white">
-          <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
+          <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4 sm:px-6">
             <a href="/" className="text-sm font-semibold text-gray-900 hover:text-black">
               Agent Skills
             </a>

@@ -41,8 +41,8 @@ export function SkillRulesView({ skill, rules }: Props) {
   }
 
   return (
-    <div className="flex gap-8">
-      <aside className="w-48 shrink-0">
+    <div className="flex flex-col gap-6 md:flex-row md:gap-8">
+      <aside className="w-full md:w-48 md:shrink-0">
         <ImpactFilter
           counts={skill.impactCounts}
           selected={selected}

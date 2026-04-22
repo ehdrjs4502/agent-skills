@@ -5,7 +5,7 @@ export default function HomePage() {
   const skills = getAllSkillMeta()
 
   return (
-    <main className="mx-auto max-w-5xl px-6 py-16">
+    <main className="mx-auto max-w-5xl px-4 py-8 sm:px-6 md:py-16">
       <div className="mb-12">
         <h1 className="text-2xl font-semibold tracking-tight text-gray-900">
           Agent Skills

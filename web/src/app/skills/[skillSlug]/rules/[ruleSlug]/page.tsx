@@ -23,8 +23,8 @@ export default async function RulePage({ params }: Props) {
   const skillName = skill?.name ?? skillSlug
 
   return (
-    <main className="mx-auto max-w-3xl px-6 py-16">
-      <nav className="mb-8 flex items-center gap-2 text-xs text-gray-400">
+    <main className="mx-auto max-w-3xl px-4 py-8 sm:px-6 md:py-16">
+      <nav className="mb-8 flex flex-wrap items-center gap-2 text-xs text-gray-400">
         <Link href="/" className="hover:text-gray-700">
           Agent Skills
         </Link>
