@@ -1,0 +1,15 @@
+{
+  "version": "1.0.0",
+  "organization": "Vercel Engineering",
+  "date": "January 2026",
+  "abstract": "React 및 Next.js 애플리케이션을 위한 종합 성능 최적화 가이드로, AI 에이전트 및 LLM을 위해 설계되었습니다. 8개 카테고리에 걸친 40개 이상의 규칙을 포함하며, 중요도 순으로 우선순위가 매겨져 있습니다(중요: 워터폴 제거, 번들 크기 감소 ~ 점진적: 고급 패턴). 각 규칙에는 자동화된 리팩토링 및 코드 생성을 안내하기 위한 상세 설명, 잘못된/올바른 구현을 비교하는 실제 사례, 구체적인 영향 지표가 포함되어 있습니다.",
+  "references": [
+    "https://react.dev",
+    "https://nextjs.org",
+    "https://swr.vercel.app",
+    "https://github.com/shuding/better-all",
+    "https://github.com/isaacs/node-lru-cache",
+    "https://vercel.com/blog/how-we-optimized-package-imports-in-next-js",
+    "https://vercel.com/blog/how-we-made-the-vercel-dashboard-twice-as-fast"
+  ]
+}
