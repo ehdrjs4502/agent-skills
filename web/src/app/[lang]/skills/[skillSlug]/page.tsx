@@ -1,25 +1,29 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { getAllSkillMeta, getSkillWithRules } from '@/lib/skills'
+import { getAllSkillMeta, getSkillWithRules, SUPPORTED_LANGS, type Lang } from '@/lib/skills'
 import { SkillRulesView } from '@/components/SkillRulesView'
 
-export async function generateStaticParams() {
-  return getAllSkillMeta("en").map((s) => ({ skillSlug: s.slug }))
+export function generateStaticParams() {
+  return SUPPORTED_LANGS.flatMap((lang) =>
+    getAllSkillMeta(lang).map((s) => ({ lang, skillSlug: s.slug }))
+  )
 }
 
 interface Props {
-  params: Promise<{ skillSlug: string }>
+  params: Promise<{ lang: Lang; skillSlug: string }>
 }
 
 export default async function SkillPage({ params }: Props) {
-  const { skillSlug } = await params
-  const skill = getSkillWithRules(skillSlug, "en")
+  const { lang, skillSlug } = await params
+  if (!SUPPORTED_LANGS.includes(lang)) notFound()
+
+  const skill = getSkillWithRules(skillSlug, lang)
   if (!skill) notFound()
 
   return (
     <main className="mx-auto max-w-5xl px-4 py-8 sm:px-6 md:py-16">
       <nav className="mb-8 flex flex-wrap items-center gap-2 text-xs text-gray-400">
-        <Link href="/" className="hover:text-gray-700">
+        <Link href={`/${lang}`} className="hover:text-gray-700">
           Agent Skills
         </Link>
         <span>/</span>
@@ -41,7 +45,7 @@ export default async function SkillPage({ params }: Props) {
         </div>
       </div>
 
-      <SkillRulesView skill={skill} rules={skill.rules} />
+      <SkillRulesView skill={skill} rules={skill.rules} lang={lang} />
     </main>
   )
 }
