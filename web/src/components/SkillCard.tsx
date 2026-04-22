@@ -1,17 +1,19 @@
 import Link from 'next/link'
 import type { SkillMeta } from '@/types'
+import type { Lang } from '@/lib/skills'
 import { IMPACT_ORDER, IMPACT_DOT } from '@/lib/constants'
 
 interface Props {
   skill: SkillMeta
+  lang: Lang
 }
 
-export function SkillCard({ skill }: Props) {
+export function SkillCard({ skill, lang }: Props) {
   const dots = IMPACT_ORDER.filter((level) => (skill.impactCounts[level] ?? 0) > 0)
 
   return (
     <Link
-      href={`/skills/${skill.slug}`}
+      href={`/${lang}/skills/${skill.slug}`}
       className="group flex flex-col gap-3 rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition hover:border-gray-300 hover:shadow-md"
     >
       <div className="flex items-start justify-between gap-2">

@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react'
 import type { Rule, ImpactLevel, SkillMeta } from '@/types'
+import type { Lang } from '@/lib/skills'
 import { IMPACT_ORDER } from '@/lib/constants'
 import { RuleCard } from './RuleCard'
 import { ImpactFilter } from './ImpactFilter'
@@ -9,9 +10,10 @@ import { ImpactFilter } from './ImpactFilter'
 interface Props {
   skill: SkillMeta
   rules: Rule[]
+  lang: Lang
 }
 
-export function SkillRulesView({ skill, rules }: Props) {
+export function SkillRulesView({ skill, rules, lang }: Props) {
   const available = useMemo(
     () => IMPACT_ORDER.filter((l) => (skill.impactCounts[l] ?? 0) > 0),
     [skill.impactCounts]
@@ -66,7 +68,7 @@ export function SkillRulesView({ skill, rules }: Props) {
         ) : (
           <div className="grid gap-3 sm:grid-cols-1 lg:grid-cols-2">
             {filtered.map((rule) => (
-              <RuleCard key={rule.slug} rule={rule} skillSlug={skill.slug} />
+              <RuleCard key={rule.slug} rule={rule} skillSlug={skill.slug} lang={lang} />
             ))}
           </div>
         )}

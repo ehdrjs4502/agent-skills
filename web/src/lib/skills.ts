@@ -6,6 +6,9 @@ import { IMPACT_ORDER } from './constants'
 
 const SKILLS_DIR = path.join(process.cwd(), '..', 'skills')
 
+export const SUPPORTED_LANGS = ['en', 'ko'] as const
+export type Lang = (typeof SUPPORTED_LANGS)[number]
+
 function getSkillSlugs(): string[] {
   return fs
     .readdirSync(SKILLS_DIR, { withFileTypes: true })
@@ -32,8 +35,8 @@ function parseRuleFile(filePath: string, slug: string): Rule {
   }
 }
 
-function getRulesForSkill(skillSlug: string): Rule[] {
-  const rulesDir = path.join(SKILLS_DIR, skillSlug, 'rules')
+function getRulesForSkill(skillSlug: string, lang: Lang): Rule[] {
+  const rulesDir = path.join(SKILLS_DIR, skillSlug, lang, 'rules')
   if (!fs.existsSync(rulesDir)) return []
 
   return fs
@@ -45,8 +48,8 @@ function getRulesForSkill(skillSlug: string): Rule[] {
     )
 }
 
-function getSkillMeta(skillSlug: string): SkillMeta {
-  const skillMdPath = path.join(SKILLS_DIR, skillSlug, 'SKILL.md')
+function getSkillMeta(skillSlug: string, lang: Lang): SkillMeta {
+  const skillMdPath = path.join(SKILLS_DIR, skillSlug, lang, 'SKILL.md')
   let name = skillSlug
   let description = ''
   let author = ''
@@ -60,7 +63,7 @@ function getSkillMeta(skillSlug: string): SkillMeta {
     version = data.metadata?.version ?? ''
   }
 
-  const rules = getRulesForSkill(skillSlug)
+  const rules = getRulesForSkill(skillSlug, lang)
   const impactCounts: Partial<Record<ImpactLevel, number>> = {}
   for (const rule of rules) {
     impactCounts[rule.impact] = (impactCounts[rule.impact] ?? 0) + 1
@@ -77,27 +80,39 @@ function getSkillMeta(skillSlug: string): SkillMeta {
   }
 }
 
-export function getAllSkillMeta(): SkillMeta[] {
-  return getSkillSlugs().map(getSkillMeta)
+function getSkillSlugsWithLang(lang: Lang): string[] {
+  return getSkillSlugs().filter((slug) =>
+    fs.existsSync(path.join(SKILLS_DIR, slug, lang))
+  )
 }
 
-export function getSkillWithRules(skillSlug: string): Skill {
-  const meta = getSkillMeta(skillSlug)
-  const rules = getRulesForSkill(skillSlug)
+export function getAllSkillMeta(lang: Lang): SkillMeta[] {
+  return getSkillSlugsWithLang(lang).map((slug) => getSkillMeta(slug, lang))
+}
+
+export function getSkillWithRules(skillSlug: string, lang: Lang): Skill {
+  const meta = getSkillMeta(skillSlug, lang)
+  const rules = getRulesForSkill(skillSlug, lang)
   return { ...meta, rules }
 }
 
-export function getRule(skillSlug: string, ruleSlug: string): Rule | null {
-  const rulesDir = path.join(SKILLS_DIR, skillSlug, 'rules')
+export function getRule(
+  skillSlug: string,
+  ruleSlug: string,
+  lang: Lang
+): Rule | null {
+  const rulesDir = path.join(SKILLS_DIR, skillSlug, lang, 'rules')
   const filePath = path.join(rulesDir, `${ruleSlug}.md`)
   if (!fs.existsSync(filePath)) return null
   return parseRuleFile(filePath, ruleSlug)
 }
 
-export function getAllRulePaths(): { skillSlug: string; ruleSlug: string }[] {
+export function getAllRulePaths(
+  lang: Lang
+): { skillSlug: string; ruleSlug: string }[] {
   const paths: { skillSlug: string; ruleSlug: string }[] = []
-  for (const slug of getSkillSlugs()) {
-    const rules = getRulesForSkill(slug)
+  for (const slug of getSkillSlugsWithLang(lang)) {
+    const rules = getRulesForSkill(slug, lang)
     for (const rule of rules) {
       paths.push({ skillSlug: slug, ruleSlug: rule.slug })
     }

@@ -1,11 +1,13 @@
 import Link from 'next/link'
 import type { Rule } from '@/types'
+import type { Lang } from '@/lib/skills'
 import { ImpactBadge } from './ui/ImpactBadge'
 import { TagList } from './ui/TagList'
 
 interface Props {
   rule: Rule
   skillSlug: string
+  lang: Lang
 }
 
 function getExcerpt(content: string, maxLen = 120): string {
@@ -18,10 +20,10 @@ function getExcerpt(content: string, maxLen = 120): string {
   return plain.length > maxLen ? plain.slice(0, maxLen) + '…' : plain
 }
 
-export function RuleCard({ rule, skillSlug }: Props) {
+export function RuleCard({ rule, skillSlug, lang }: Props) {
   return (
     <Link
-      href={`/skills/${skillSlug}/rules/${rule.slug}`}
+      href={`/${lang}/skills/${skillSlug}/rules/${rule.slug}`}
       className="group flex flex-col gap-2.5 rounded-lg border border-gray-200 bg-white p-4 transition hover:border-gray-300 hover:shadow-sm"
     >
       <div className="flex items-start justify-between gap-3">
